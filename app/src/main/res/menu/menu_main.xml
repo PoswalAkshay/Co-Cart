@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_edit_profile"
+        android:title="Edit Profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_leave_household"
+        android:title="Leave Room"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_pending_requests"
+        android:title="Join Requests 🔔"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_regenerate_code"
+        android:title="Regenerate Room Code"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_code"
+        android:title="Copy Room Code"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout Account"
+        app:showAsAction="never" />
+
+</menu>

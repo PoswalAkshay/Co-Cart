@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Fresh Market Theme Color Palette -->
+    <color name="primary_green">#2E7D32</color>
+    <color name="primary_green_dark">#1B5E20</color>
+
+    <color name="accent_amber">#FFB300</color>
+    <color name="accent_amber_dark">#F57F17</color>
+
+    <color name="background_fresh">#F1F8E9</color>
+    <color name="card_border">#C8E6C9</color>
+
+    <color name="icon_secondary">#757575</color>
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#616161</color>
+    <color name="rose_500">#D32F2F</color>
+
+    <!-- Compatibility aliases -->
+    <color name="indigo_500">#2E7D32</color>
+    <color name="indigo_600">#1B5E20</color>
+    <color name="indigo_700">#1B5E20</color>
+
+    <color name="emerald_500">#FFB300</color>
+    <color name="emerald_600">#F57F17</color>
+
+    <color name="amber_500">#FFB300</color>
+    <color name="slate_50">#F1F8E9</color>
+    <color name="slate_100">#DCEDC8</color>
+    <color name="slate_200">#C8E6C9</color>
+    <color name="slate_600">#616161</color>
+    <color name="slate_800">#212121</color>
+</resources>

@@ -1,0 +1,84 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isHouseholdMember(householdId) {
+      return signedIn() && exists(
+        /databases/$(database)/documents/households/$(householdId)/members/$(request.auth.uid)
+      );
+    }
+
+    match /users/{userId} {
+      allow get: if signedIn() && request.auth.uid == userId;
+      allow list: if false;
+
+      // The client may create/update its profile, but cannot assign itself to a household.
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'displayName', 'householdId'])
+        && request.resource.data.uid == userId
+        && request.resource.data.householdId == '';
+
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.householdId == resource.data.householdId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['email', 'displayName']);
+
+      allow delete: if false;
+    }
+
+    match /householdInvites/{inviteCode} {
+      // Invite lookup and mutation are handled by trusted callable functions only.
+      allow read, write: if false;
+    }
+
+    match /households/{householdId} {
+      allow get: if isHouseholdMember(householdId);
+      allow list: if false;
+      // Creation and membership changes go through callable functions.
+      allow create, update, delete: if false;
+
+      match /members/{memberId} {
+        allow read: if isHouseholdMember(householdId);
+        allow create, update, delete: if false;
+      }
+
+      match /grocery_items/{itemId} {
+        function validItem() {
+          return request.resource.data.keys().hasOnly([
+              'itemId', 'householdId', 'name', 'quantity', 'purchased',
+              'addedBy', 'addedByName', 'createdAt'
+            ])
+            && request.resource.data.itemId == itemId
+            && request.resource.data.householdId == householdId
+            && request.resource.data.name is string
+            && request.resource.data.name.size() > 0
+            && request.resource.data.name.size() <= 100
+            && request.resource.data.quantity is string
+            && request.resource.data.quantity.size() <= 40
+            && request.resource.data.purchased is bool
+            && request.resource.data.addedBy is string
+            && request.resource.data.addedByName is string
+            && request.resource.data.createdAt is int;
+        }
+
+        allow read: if isHouseholdMember(householdId);
+        allow create: if isHouseholdMember(householdId)
+          && validItem()
+          && request.resource.data.addedBy == request.auth.uid;
+        allow update: if isHouseholdMember(householdId)
+          && validItem()
+          && request.resource.data.addedBy == resource.data.addedBy
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['name', 'quantity', 'purchased']);
+        allow delete: if isHouseholdMember(householdId);
+      }
+    }
+  }
+}
